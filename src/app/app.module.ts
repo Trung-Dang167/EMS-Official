@@ -1,14 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule} from '@angular/platform-browser/animations'
-import { MatTableModule } from '@angular/material/table'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlarmComponent } from './alarm/alarm.component';
 import { BodyComponent } from './body/body.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SublevelMenuComponent } from './sidenav/sublevel-menu.component';
 import { FormsModule } from '@angular/forms';
 import { ServerService } from './shared/server.service';
@@ -29,13 +29,11 @@ import { DateConvertPipe } from './shared/date-convert.pipe';
 import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
 import { NotificationService } from './shared/notification.service';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {HttpClient} from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
 import { AuthInterceptorService } from './shared/auth-interceptor.service';
-
-
 
 @NgModule({
   declarations: [
@@ -74,24 +72,26 @@ import { AuthInterceptorService } from './shared/auth-interceptor.service';
     MatTableModule,
     TranslateModule.forRoot({
       loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-      }
-    })
-],
-  providers: [ServerService, NotificationService, 
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptorService,
-    multi: true
-  }
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
+  ],
+  providers: [
+    ServerService,
+    NotificationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http); 
+  return new TranslateHttpLoader(http);
 }
