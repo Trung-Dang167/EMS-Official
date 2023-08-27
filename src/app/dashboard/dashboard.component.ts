@@ -28,13 +28,13 @@ export class DashboardComponent implements OnInit {
     private _dialog: MatDialog,
     private translate: TranslateService
   ) {
-      translate.setDefaultLang('vi');
-      translate.use('vi');
+    translate.setDefaultLang('vi');
+    translate.use('vi');
   }
 
   ngOnInit(): void {
-     this.getDashboardInfo();
-     this.connectWebSocket();
+    this.getDashboardInfo();
+    this.connectWebSocket();
   }
 
   getDashboardInfo() {
@@ -43,7 +43,6 @@ export class DashboardComponent implements OnInit {
         this.dataSource = new MatTableDataSource(res)
         this.dataSource.sort = this.sort
       },
-      error: console.log
     })
   }
 
@@ -58,7 +57,6 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
 
   openEditForm(data: any) {
     const dialogRef = this._dialog.open(ModifyDashboardComponent, {

@@ -5,16 +5,14 @@ import { AlarmComponent } from './alarm/alarm.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './shared/auth.guard';
 import { SignupComponent } from './signup/signup.component';
+import { StatisticsListComponent } from './statistics-list/statistics-list.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'signup', component: SignupComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent},
-  {
-    path: 'statistics',
-    loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule),
-  },
+  {path: 'trend', component: StatisticsListComponent},
   {path: 'alarm', component: AlarmComponent},
   {
     path: 'setting', 

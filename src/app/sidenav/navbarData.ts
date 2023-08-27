@@ -8,16 +8,9 @@ export const navbarData : INavbarData[]= [
 
     },
     {
-        routeLink: 'statistics',
+        routeLink: 'trend',
         icon: 'fal fa-chart-bar',
-        label: 'Statistics',
-        expanded: false,
-        items: [
-            {
-                routeLink: 'statistics/all gas',
-                label: 'All Factors',
-            },
-        ]
+        label: 'Trend',
     },
     {
         routeLink: 'alarm',

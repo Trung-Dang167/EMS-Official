@@ -14,6 +14,7 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class ServerService {
+
   isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   userId!: Pick<User, "id">;
 
@@ -37,6 +38,13 @@ export class ServerService {
     return this.http.get<Data[]>('http://localhost:3000/dashboard', {responseType: 'json'})
     .pipe(
       catchError(this.errorHandlerService.handleError<Data[]>('fetchAll', []))
+    );
+  }
+
+  getStat(): Observable<any> {
+    return this.http.get<any>('http://localhost:3000/statistics', {responseType: 'json'})
+    .pipe(
+      catchError(this.errorHandlerService.handleError<any>('fetchStat', []))
     );
   }
 

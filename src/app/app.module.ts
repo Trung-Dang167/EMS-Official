@@ -34,6 +34,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
 import { AuthInterceptorService } from './shared/auth-interceptor.service';
+import { StatisticsListComponent } from './statistics-list/statistics-list.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AuthInterceptorService } from './shared/auth-interceptor.service';
     RangeModificationComponent,
     LoginComponent,
     SignupComponent,
+    StatisticsListComponent,
   ],
   imports: [
     BrowserModule,
