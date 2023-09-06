@@ -9,11 +9,13 @@ import { Router } from '@angular/router';
 import { Data } from '../dashboard/dashboardInfo';
 import { gasBound } from '../setting/gasComponent';
 import { NotificationService } from './notification.service';
+import { chartData } from '../statistics-list/chartData';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
+
   isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   userId!: Pick<User, "id">;
 
@@ -37,6 +39,13 @@ export class ServerService {
     return this.http.get<Data[]>('http://localhost:3000/dashboard', {responseType: 'json'})
     .pipe(
       catchError(this.errorHandlerService.handleError<Data[]>('fetchAll', []))
+    );
+  }
+
+  getStat(): Observable<chartData[]> {
+    return this.http.get<chartData[]>('http://localhost:3000/trend', {responseType: 'json'})
+    .pipe(
+      catchError(this.errorHandlerService.handleError<chartData[]>('fetchStat', []))
     );
   }
 
