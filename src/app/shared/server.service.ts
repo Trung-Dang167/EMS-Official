@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Data } from '../dashboard/dashboardInfo';
 import { gasBound } from '../setting/gasComponent';
 import { NotificationService } from './notification.service';
+import { chartData } from '../statistics-list/chartData';
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +42,10 @@ export class ServerService {
     );
   }
 
-  getStat(): Observable<any> {
-    return this.http.get<any>('http://localhost:3000/statistics', {responseType: 'json'})
+  getStat(): Observable<chartData[]> {
+    return this.http.get<chartData[]>('http://localhost:3000/trend', {responseType: 'json'})
     .pipe(
-      catchError(this.errorHandlerService.handleError<any>('fetchStat', []))
+      catchError(this.errorHandlerService.handleError<chartData[]>('fetchStat', []))
     );
   }
 

@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   private socket!: Socket;
 
   constructor(
-    private data: ServerService,
+    private data$: ServerService,
     private _dialog: MatDialog,
     private translate: TranslateService
   ) {
@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDashboardInfo() {
-    this.data.getData().subscribe({
+    this.data$.getData().subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource(res)
         this.dataSource.sort = this.sort
