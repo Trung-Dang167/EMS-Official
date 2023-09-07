@@ -3,9 +3,6 @@ import { Chart } from 'chart.js/auto'
 import { ServerService } from '../shared/server.service';
 import { TranslateService } from '@ngx-translate/core';
 import { io, Socket } from 'socket.io-client';
-import { SocketService } from '../shared/socket.service';
-import { chartData } from './chartData';
-
 
 @Component({
   selector: 'app-statistics-list',
@@ -18,9 +15,7 @@ export class StatisticsListComponent implements OnInit {
   private dataSource!: any
   @ViewChild('realtimeChart') chartCanvas!: ElementRef;
 
-
   constructor(private srv: ServerService,
-    private data: SocketService,
     private translate: TranslateService) {
     translate.setDefaultLang('vi');
     translate.use('vi');
@@ -36,20 +31,23 @@ export class StatisticsListComponent implements OnInit {
     this.srv.getStat().subscribe({
       next: (res) => {
         this.dataSource = res;
+        this.initializeChart();
       }
     })
   }
 
   connectWebSocket() {
     this.socket = io('http://localhost:3000');
-    this.socket.on('stat', (realtimeData: chartData[]) => {
-
+    this.socket.on('histories', (historiesResults: any) => {
+      this.updateChart(historiesResults);
+      console.log('Received historiesResults!');
     });
   }
 
   initializeChart(): void {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const ctx = document.getElementById('lineChart') as HTMLCanvasElement;
+//    const ctx = this.chartCanvas.nativeElement.getContext('2d');
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -185,16 +183,56 @@ export class StatisticsListComponent implements OnInit {
     });
   }
 
+  updateChart(historiesResults: any): void {
+    // Tạo các mảng để lưu trữ giá trị của từng cột
+    const gasO2Values = [];
+    const gasCOValues = [];
+    const gasNOxValues = [];
+    const gasSO2Values = [];
+    const gasHClValues = [];
+    const gasH2OValues = [];
+    const stackTempValues = [];
+    const stackPressureValues = [];
+    const stackDustValues = [];
+    const stackFlowValues = [];
+    const tempFurnance301Values = [];
+    const tempFurnance302Values = [];
+  
+    // Lặp qua tất cả các hàng trong biến historiesResults
+    for (const row of historiesResults) {
+      gasO2Values.push(parseFloat(row.gas_o2));
+      gasCOValues.push(parseFloat(row.gas_co));
+      gasNOxValues.push(parseFloat(row.gas_nox));
+      gasSO2Values.push(parseFloat(row.gas_so2));
+      gasHClValues.push(parseFloat(row.gas_hcl));
+      gasH2OValues.push(parseFloat(row.gas_h2o));
+      stackTempValues.push(parseFloat(row.stack_temp));
+      stackPressureValues.push(parseFloat(row.stack_pressure));
+      stackDustValues.push(parseFloat(row.stack_dust));
+      stackFlowValues.push(parseFloat(row.stack_flow));
+      tempFurnance301Values.push(parseFloat(row.temp_furnance301));
+      tempFurnance302Values.push(parseFloat(row.temp_furnance302));
+    }
+  
+    // Cập nhật giá trị của các dataset trong biểu đồ
+    this.chart.data.datasets[0].data = gasO2Values;
+    this.chart.data.datasets[1].data = gasCOValues;
+    this.chart.data.datasets[2].data = gasNOxValues;
+    this.chart.data.datasets[3].data = gasSO2Values;
+    this.chart.data.datasets[4].data = gasHClValues;
+    this.chart.data.datasets[5].data = gasH2OValues;
+    this.chart.data.datasets[6].data = stackTempValues;
+    this.chart.data.datasets[7].data = stackPressureValues;
+    this.chart.data.datasets[8].data = stackDustValues;
+    this.chart.data.datasets[9].data = stackFlowValues;
+    this.chart.data.datasets[10].data = tempFurnance301Values;
+    this.chart.data.datasets[11].data = tempFurnance302Values;
+  
+    // Cập nhật biểu đồ
+    this.chart.update();
+  }
+
   useLanguage(language: string): void {
     this.translate.use(language);
   }
 }
-
-
-
-
-
-
-
-
-
