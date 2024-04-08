@@ -1,37 +1,34 @@
-<h1>{{'alarm' | translate}}</h1>
+<h1>{{'Alarm History' | translate}}</h1>
 
-<div class="">
+<div class="main-body">
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="tag">
-      <th mat-header-cell *matHeaderCellDef> Tag </th>
-      <td mat-cell *matCellDef="let data"> {{data.tag}} </td>
+      <th mat-header-cell *matHeaderCellDef>  {{'Mã Thiết Bị' | translate}} </th>
+      <td mat-cell *matCellDef="let data" [ngClass]="getRowClass(data.status, data.errorConfirmed)"> {{data.tag}} </td>
     </ng-container>
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> {{'sampleName' | translate}} </th>
-      <td mat-cell *matCellDef="let data"> {{data.name}} </td>
+      <th mat-header-cell *matHeaderCellDef> {{'Tên Mẫu Đo' | translate}} </th>
+      <td mat-cell *matCellDef="let data" [ngClass]="getRowClass(data.status, data.errorConfirmed)"> {{data.name}} </td>
     </ng-container>
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> {{'status' | translate}} </th>
-      <td mat-cell *matCellDef="let data">
-        <button mat-button color="warn" >
-          {{+data.realtimeValue > +data.upperbound ? "High" : ""}}
-        </button>
-      </td>
+      <th mat-header-cell *matHeaderCellDef> {{'Trạng Thái' | translate}} </th>
+      <td mat-cell *matCellDef="let data" [ngClass]="getRowClass(data.status, data.errorConfirmed)"> {{data.status}} </td>
     </ng-container>
     <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef> {{'time' | translate}} </th>
-      <td mat-cell *matCellDef="let data"> {{data.time |translate | date: 'medium' }} </td>
+      <th mat-header-cell *matHeaderCellDef> {{'Thời gian hiện cảnh báo' | translate}} </th>
+      <td mat-cell *matCellDef="let data" [ngClass]="getRowClass(data.status, data.errorConfirmed)"> {{data.time |translate | date: 'dd/MM/yyyy, HH:mm a'}} </td>
     </ng-container>
-    <ng-container matColumnDef="realtimeValue">
-      <th mat-header-cell *matHeaderCellDef> {{'realtimeValue' | translate}} </th>
-      <td mat-cell *matCellDef="let data"> {{data.realtimeValue}} </td>
-    </ng-container>
-
+    <!-- <ng-container matColumnDef="errorConfirmed">
+      <th mat-header-cell *matHeaderCellDef>{{'Xác Nhận Cảnh Báo' | translate}}</th>
+      <td mat-cell *matCellDef="let data">
+        <mat-checkbox [(ngModel)]="data.errorConfirmed" (change)="onCheckboxChange($event, data)"></mat-checkbox>
+      </td>
+    </ng-container> -->
     <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
     <tr mat-row *matRowDef="let data; columns: displayColumns;"></tr>
   </table>
+  <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
 </div>
-
 <div class="language">
   <span class="fi fi-vn">
     <button mat-button (click)="useLanguage('vi')"></button>

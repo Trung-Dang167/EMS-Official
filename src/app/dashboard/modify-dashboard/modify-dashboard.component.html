@@ -17,10 +17,10 @@
             </div>
     
             <div class="row">
-                <mat-form-field appearance="outline">
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Expected Value</mat-label>
                     <input matInput type="text" formControlName="expectedValue">
-                </mat-form-field>
+                </mat-form-field> -->
                 <mat-form-field appearance="outline">
                     <mat-label>Realtime Value</mat-label>
                     <input matInput type="number" formControlName="realtimeValue" [readonly]=true>
@@ -33,14 +33,19 @@
                     <input matInput type="text" formControlName="unit" [readonly]=true>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Design P (kPa(g))</mat-label>
-                    <input matInput type="text" formControlName="designP" [readonly]=true>
+                    <mat-label>Status</mat-label>
+                    <input matInput type="text" formControlName="status" [readonly]=true>
+                    <!-- <select matNativeControl formControlName="status">
+                        <option value="Normal">Normal</option>
+                        <option value="Error">Error</option>
+                        <option value="Calib">Calib</option>
+                    </select> -->
                 </mat-form-field>
             </div>
         </div>
-        <div mat-dialog-actions class="action">
+        <!-- <div mat-dialog-actions class="action">
             <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
             <button mat-raised-button color="primary" type="submit">Update</button>
-        </div>
+        </div> -->
     </form>
 </div>

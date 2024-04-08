@@ -1,0 +1,28 @@
+.main-body {
+    padding-top: 20px;
+    // margin: 0 auto;
+    // max-width: 1348px;
+    margin-left: 0px;
+    margin-right: auto; /* Đảm bảo căng giữa */
+    max-width: 1000px;
+    // text-align: center;
+    // text-align: center;
+    font-size: medium;
+    mat-form-field {
+      width: 100%;
+    }
+}
+
+.alarm-color{
+  // background: red;
+  color: red;
+}
+
+.system-color{
+  // background: purple;
+  color: purple;
+}
+
+.ack-row{
+  color: black;
+}

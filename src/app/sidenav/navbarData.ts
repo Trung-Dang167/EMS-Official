@@ -26,7 +26,7 @@ export const navbarData : INavbarData[]= [
         items: [
             {
                 routeLink: 'setting/customize',
-                label: 'Alarm Settings'
+                label: 'Settings'
             },
             {
                 routeLink: 'login',

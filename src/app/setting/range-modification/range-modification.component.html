@@ -17,12 +17,12 @@
 
         <div class="row">
             <mat-form-field appearance="outline">
-                <mat-label>{{'Upperbound' | translate}}</mat-label>
-                <input matInput type="text" formControlName="upperbound">
+                <mat-label>{{'Max Value' | translate}}</mat-label>
+                <input matInput type="text" formControlName="maxValue" [readonly]=true>
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{'Lowerbound' | translate}}</mat-label>
-                <input matInput type="text" formControlName="lowerbound">
+                <mat-label>{{'Alarm Value' | translate}}</mat-label>
+                <input matInput type="text" formControlName="alarmValue">
             </mat-form-field>
         </div>
     </div>

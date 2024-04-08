@@ -2,16 +2,56 @@
     flex: 1 1 auto;
   }
   
-  .main-body {
-    padding-top: 20px;
-    margin: 0 auto;
-    max-width: 1348px;
-    mat-form-field {
-      width: 100%;
-    }
+.main-body {
+  padding-top: 20px;
+  margin: 0 auto;
+  max-width: 1348px;
+  mat-form-field {
+    width: 100%;
+  }
+}
+  
+  // .action {
+  //   display: flex;
+  //   gap: 5px;
+  // }
+  /* Thêm các lớp cho các trạng thái */
+.normal-row {
+  color: green;
+}
+
+.error-row {
+  color: red; /* Màu đỏ cho trạng thái error */
+  font-weight: bold;
+}
+
+.calib-row {
+  color: purple; /* Màu tím cho trạng thái calib */
+  font-weight: bold;
+  font-style: italic;
+}
+
+.high-alarm{
+  color: red;
+  font-weight: bold;
+  animation: blink-animation 500ms infinite alternate;
+}
+
+.normal-alarm{
+  color: green;
+}
+
+@keyframes blink-animation {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
   
-  .action {
-    display: flex;
-    gap: 5px;
-  }
+}
+
+.mat-header-cell, .mat-cell {
+  padding-left: 1500px; /* Khoảng cách bên trái */
+  padding-right: 1500px; /* Khoảng cách bên phải */
+}

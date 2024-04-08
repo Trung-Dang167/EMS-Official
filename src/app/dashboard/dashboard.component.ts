@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayColumns: string[] = ['tag', 'name', 'expectedValue', 'realtimeValue', 'unit', 'designP', 'action'];
+  displayColumns: string[] = ['tag', 'name', 'realtimeValue', 'unit', 'status', 'alarmStatus'];
   dataSource!: MatTableDataSource<any>
   userRoleStatus!: string;
   private socket!: Socket;
@@ -37,6 +37,26 @@ export class DashboardComponent implements OnInit {
     this.connectWebSocket();
   }
 
+  getRowClass(status: string) {
+    switch (status) {
+      case 'Error':
+        return 'error-row';
+      case 'Calib':
+        return 'calib-row';
+      default:
+        return 'normal-row';
+    }
+  }
+
+  getStatusAlarm(status: string){
+    switch (status){
+      case 'High':
+        return 'high-alarm';
+      default:
+        return 'normal-alarm';
+    }
+  }
+
   getDashboardInfo() {
     this.data$.getData().subscribe({
       next: (res) => {
@@ -47,6 +67,7 @@ export class DashboardComponent implements OnInit {
   }
 
   connectWebSocket() {
+    console.log('Connected WebSocket for Dashboard Data');
     this.socket = io('http://localhost:3000');
     this.socket.on('data', (realtimeData: Data[]) => {
       if (Array.isArray(this.dataSource.data)) {

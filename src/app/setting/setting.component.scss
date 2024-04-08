@@ -2,16 +2,21 @@
     flex: 1 1 auto;
   }
   
-  .main-body {
-    padding-top: 20px;
-    margin: 0 auto;
-    max-width: 1348px;
-    mat-form-field {
-      width: 100%;
-    }
+.main-body {
+  padding-top: 20px;
+  margin: 0 auto;
+  max-width: 1348px;
+  // text-align: center;
+  mat-form-field {
+    width: 100%;
   }
-  
-  .action {
-    display: flex;
-    gap: 5px;
-  }
+}
+
+.action {
+  display: flex;
+  gap: 5px;
+}
+
+.mat-cell {
+  text-align: center;
+}

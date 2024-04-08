@@ -7,6 +7,7 @@ import { first, catchError } from 'rxjs/operators'
 import { ErrorHandlerService } from './error-handler.service';
 import { Router } from '@angular/router';
 import { Data } from '../dashboard/dashboardInfo';
+import { alarmData } from '../alarm/alarmInfo';
 import { gasBound } from '../setting/gasComponent';
 import { NotificationService } from './notification.service';
 import { chartData } from '../statistics-list/chartData';
@@ -42,10 +43,17 @@ export class ServerService {
     );
   }
 
-  getStat(): Observable<chartData[]> {
-    return this.http.get<chartData[]>('http://localhost:3000/trend', {responseType: 'json'})
+  getAlarm(): Observable<alarmData[]> {
+    return this.http.get<alarmData[]>('http://localhost:3000/alarm', {responseType: 'json'})
     .pipe(
-      catchError(this.errorHandlerService.handleError<chartData[]>('fetchStat', []))
+      catchError(this.errorHandlerService.handleError<alarmData[]>('fetchAlarm', []))
+    );
+  }
+
+  getStat(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/trend', {responseType: 'json'})
+    .pipe(
+      catchError(this.errorHandlerService.handleError<any[]>('fetchStat', []))
     );
   }
 

@@ -35,6 +35,8 @@ import { HttpClient } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
 import { AuthInterceptorService } from './shared/auth-interceptor.service';
 import { StatisticsListComponent } from './statistics-list/statistics-list.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @NgModule({
   declarations: [
@@ -72,6 +74,7 @@ import { StatisticsListComponent } from './statistics-list/statistics-list.compo
     MatIconModule,
     MatCardModule,
     MatTableModule,
+    MatCheckboxModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

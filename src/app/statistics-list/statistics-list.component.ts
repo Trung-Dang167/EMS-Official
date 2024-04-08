@@ -2,10 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto'
 import { ServerService } from '../shared/server.service';
 import { TranslateService } from '@ngx-translate/core';
-import { io, Socket } from 'socket.io-client';
-import { SocketService } from '../shared/socket.service';
-import { chartData } from './chartData';
-
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-statistics-list',
@@ -14,173 +11,97 @@ import { chartData } from './chartData';
 })
 export class StatisticsListComponent implements OnInit {
   chart: any;
-  private socket!: Socket;
-  private dataSource!: any
-  @ViewChild('realtimeChart') chartCanvas!: ElementRef;
+  dataSource!: any[];
+  selectedValue: string = 'Flow';// Khởi tạo giá trị mặc định cho selectedValue
+  values: string[] = ['Flow', 'Pressure', 'O2', 'CO', 'NOx', 'SO2', 'HCl', 'Dust', 'H20', 'Temperature'];
+  @ViewChild('lineChart') chartCanvas!: ElementRef;
 
-
-  constructor(private srv: ServerService,
-    private data: SocketService,
-    private translate: TranslateService) {
+  constructor(private srv: ServerService, private translate: TranslateService) {
     translate.setDefaultLang('vi');
     translate.use('vi');
   }
 
   ngOnInit(): void {
-    this.getChartData()
-    this.connectWebSocket()
-    //this.initializeChart();
+    this.getChartData();// Lấy dữ liệu lần đầu tiên
+    this.startAutoUpdate();//Bắt đầu cập nhật tự động
   }
 
   getChartData() {
+
     this.srv.getStat().subscribe({
       next: (res) => {
         this.dataSource = res;
+        this.initializeChart(this.selectedValue);
       }
     })
   }
 
-  connectWebSocket() {
-    this.socket = io('http://localhost:3000');
-    this.socket.on('stat', (realtimeData: chartData[]) => {
+  onSelectChange(event: any) {
+    const selectedValue = event.target.value;
+    this.initializeChart(selectedValue);
+  }
 
+  startAutoUpdate(): void {
+    // Sử dụng interval để gọi lại hàm getChartData sau mỗi khoảng thời gian
+    interval(30000).subscribe(() => {
+      this.getChartData();
     });
   }
 
-  initializeChart(): void {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  initializeChart(selectedValue: string): void {
+        // Hủy bỏ biểu đồ cũ trước khi tạo biểu đồ mới
+    if (this.chart) {
+      console.log('Chrt destroy!')
+      this.chart.destroy();
+    }
+    const filteredData = this.dataSource.filter(item => item.name === selectedValue);
+    const labels = filteredData.map(item => item.time);
+    const data = filteredData.map(item => parseFloat(item.value));
+    const alarm = filteredData.map(item => parseFloat(item.alarmValue));
+    const unit = filteredData.map(item => item.unit);
+    const maxRange = filteredData.map(item => parseFloat(item.maxValue));
+    const minRange = filteredData.map(item => parseFloat(item.minValue));
+    console.log('selectedValue', selectedValue);
+    // console.log('Value:', data);
+    // console.log('Unit:', unit);
+    // console.log('Alarm Value:', alarm);
+    // console.log('MaxValue:',maxRange[0]);
+    // console.log('MinValue:',minRange[0]);
+
     const ctx = document.getElementById('lineChart') as HTMLCanvasElement;
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: daysOfWeek,
+        labels: labels,
         datasets: [{
-          label: 'Flue gas O2', // tag name
-          data: this.dataSource.gas_o2, // realtimeValue
-          fill: false,
-          borderColor: 'red',
-          borderWidth: 1,
-          showLine: false,
-          tension: 0
-        },
-        {
-          label: 'Flue gas CO',
-          data: this.dataSource.gas_co,
-          fill: false,
-          borderColor: 'black',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        },
-        {
-          label: 'Flue gas NOx',
-          data: this.dataSource.gas_nox,
+          label: selectedValue,
+          data: data,
           fill: false,
           borderColor: 'blue',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
+          borderWidth: 1.5
         },
         {
-          label: 'Flue gas SO2',
-          data: this.dataSource.gas_so2,
+          label: 'Alarm',
+          data: alarm,
           fill: false,
-          borderColor: 'purple',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        },
-        {
-          label: 'Flue gas HCl',
-          data: this.dataSource.gas_hcl,
-          fill: false,
-          borderColor: 'aliceblue',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        },
-        {
-          label: 'Flue gas H2O',
-          data: this.dataSource.gas_h2o,
-          fill: false,
-          borderColor: 'gray',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'FT TEMP',
-          data: this.dataSource.stack_temp,
-          fill: false,
-          borderColor: 'green',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'FT PRESSURE',
-          data: this.dataSource.stack_pressure,
-          fill: false,
-          borderColor: 'violet',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'FT DUST',
-          data: this.dataSource.stack_dust,
-          fill: false,
-          borderColor: 'yellow',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'FT FLOW',
-          data: this.dataSource.stack_flow,
-          fill: false,
-          borderColor: 'orange',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'Furnance TT0301',
-          data: this.dataSource.temp_furnance301,
-          fill: false,
-          borderColor: 'black',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
-        }
-          , {
-          label: 'Furnance TT0302',
-          data: this.dataSource.temp_furnance302,
-          fill: false,
-          borderColor: 'tomato',
-          borderWidth: 1,
-          showLine: true,
-          tension: 0
+          borderColor: 'red',
+          borderWidth: 1.5
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false, // Allows the chart to adjust both width and height
-        aspectRatio: 0.5 // You can adjust this value to control the aspect ratio of the chart
-      }
-    });
-  }
-
-  // line chart visibility
-  ngAfterViewInit(): void {
-    this.chartCanvas.nativeElement.addEventListener('click', (event: any) => {
-      const activePoints = this.chart.getActiveElements(event);
-
-      if (activePoints.length > 0) {
-        const datasetIndex = activePoints[0].datasetIndex;
-        const dataset = this.chart.data.datasets[datasetIndex];
-        dataset.showLine = !dataset.showLine; // Toggle visibility
-        this.chart.update(); // Update the chart
+        aspectRatio: 0.5, // You can adjust this value to control the aspect ratio of the chart
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: unit[0]
+            },
+            max: maxRange[0],
+            min: minRange[0]
+          }
+        }
       }
     });
   }

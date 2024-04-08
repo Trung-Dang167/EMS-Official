@@ -22,8 +22,8 @@ export class RangeModificationComponent implements OnInit{
     this.alarmCusForm = this._fb.group({
       tag: '',
       name: '',
-      upperbound: '',
-      lowerbound: ''
+      maxValue: '',
+      alarmValue: ''
     });
   }
 

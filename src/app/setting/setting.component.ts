@@ -15,7 +15,7 @@ export class SettingComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  public displayColumns: string[] = ['tag', 'name', 'upperbound', 'lowerbound', 'action']
+  public displayColumns: string[] = ['tag', 'name', 'maxValue', 'alarmValue', 'action']
   dataSource!: MatTableDataSource<any>
 
   constructor(

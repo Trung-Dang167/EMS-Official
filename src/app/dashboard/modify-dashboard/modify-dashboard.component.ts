@@ -22,10 +22,10 @@ export class ModifyDashboardComponent {
     this.dashForm = this._fb.group({
       tag: '',
       name: '',
-      expectedValue: '',
+      // expectedValue: '',
       realtimeValue: '',
       unit: '',
-      designP: ''
+      status: ''
     });
   }
 

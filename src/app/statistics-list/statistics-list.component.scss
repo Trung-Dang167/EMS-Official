@@ -1,0 +1,24 @@
+/* Thiết lập kích thước cố định cho phần tử chứa biểu đồ */
+    .row {
+    font-family: Arial, sans-serif; /* Chọn font chữ */
+    padding-top: 20px;
+    width: 100%; /* Thiết lập kích thước tối đa */
+    max-width: 1800px; /* Thiết lập kích thước tối đa cho phần tử chứa biểu đồ */
+    margin: 0 auto; /* Canh giữa phần tử chứa biểu đồ */
+    height: 800px;
+  }
+  
+  /* Thiết lập overflow cho phần tử chứa biểu đồ */
+  #lineChart {
+    width: 100%; /* Đảm bảo rằng biểu đồ sẽ điền vào toàn bộ không gian có sẵn */
+    height:auto ; /* Cho phép biểu đồ co dãn theo chiều cao */
+    display: block; /* Đảm bảo rằng phần tử canvas sẽ hiển thị như một khối */
+    overflow: hidden; /* Ẩn phần tử biểu đồ khi nó vượt ra ngoài kích thước của phần tử chứa */
+  }
+
+  .custom-dropdown {
+    font-family: Arial, sans-serif; /* Chọn font chữ */
+    font-size: 23px; /* Kích cỡ chữ */
+    font-weight: bold;
+  }
+  
