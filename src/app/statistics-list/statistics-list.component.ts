@@ -23,35 +23,31 @@ export class StatisticsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getChartData();// Lấy dữ liệu lần đầu tiên
-    this.startAutoUpdate();//Bắt đầu cập nhật tự động
+    interval(30000).subscribe(() => {
+      this.getChartData(); // Lấy dữ liệu mỗi 30 giây
+    });
   }
 
   getChartData() {
-
     this.srv.getStat().subscribe({
       next: (res) => {
         this.dataSource = res;
-        this.initializeChart(this.selectedValue);
+        if (!this.chart){
+          this.initializeChart(this.selectedValue); //Tạo biểu đồ ban đầu
+        } else {
+          this.updateChart(this.selectedValue); //Cập nhật biểu đồ
+        }
       }
-    })
+    });
   }
 
   onSelectChange(event: any) {
     const selectedValue = event.target.value;
-    this.initializeChart(selectedValue);
-  }
-
-  startAutoUpdate(): void {
-    // Sử dụng interval để gọi lại hàm getChartData sau mỗi khoảng thời gian
-    interval(30000).subscribe(() => {
-      this.getChartData();
-    });
+    this.initializeChart(selectedValue); //Cập nhật biểu đồ khi có sự thay đổi lưạ chọn
   }
 
   initializeChart(selectedValue: string): void {
-        // Hủy bỏ biểu đồ cũ trước khi tạo biểu đồ mới
-    if (this.chart) {
-      console.log('Chrt destroy!')
+    if (this.chart){
       this.chart.destroy();
     }
     const filteredData = this.dataSource.filter(item => item.name === selectedValue);
@@ -61,12 +57,6 @@ export class StatisticsListComponent implements OnInit {
     const unit = filteredData.map(item => item.unit);
     const maxRange = filteredData.map(item => parseFloat(item.maxValue));
     const minRange = filteredData.map(item => parseFloat(item.minValue));
-    console.log('selectedValue', selectedValue);
-    // console.log('Value:', data);
-    // console.log('Unit:', unit);
-    // console.log('Alarm Value:', alarm);
-    // console.log('MaxValue:',maxRange[0]);
-    // console.log('MinValue:',minRange[0]);
 
     const ctx = document.getElementById('lineChart') as HTMLCanvasElement;
     this.chart = new Chart(ctx, {
@@ -81,7 +71,7 @@ export class StatisticsListComponent implements OnInit {
           borderWidth: 1.5
         },
         {
-          label: 'Alarm',
+          label: 'Alarm Setting',
           data: alarm,
           fill: false,
           borderColor: 'red',
@@ -106,16 +96,20 @@ export class StatisticsListComponent implements OnInit {
     });
   }
 
+  updateChart(selectedValue: string): void{
+    console.log("Update Chart Called!");
+    const filteredData = this.dataSource.filter(item => item.name === selectedValue);
+    const labels = filteredData.map(item => item.time);
+    const data = filteredData.map(item => parseFloat(item.value));
+    const alarm = filteredData.map(item => parseFloat(item.alarmValue));
+
+    this.chart.data.labels = labels;
+    this.chart.data.datasets[0].data = data;
+    this.chart.data.datasets[1].data = alarm;
+
+    this.chart.update(); // Cập nhật biểu đồ
+  }
   useLanguage(language: string): void {
     this.translate.use(language);
   }
 }
-
-
-
-
-
-
-
-
-

@@ -1,11 +1,13 @@
 /* Thiết lập kích thước cố định cho phần tử chứa biểu đồ */
     .row {
     font-family: Arial, sans-serif; /* Chọn font chữ */
-    padding-top: 20px;
-    width: 100%; /* Thiết lập kích thước tối đa */
-    max-width: 1800px; /* Thiết lập kích thước tối đa cho phần tử chứa biểu đồ */
-    margin: 0 auto; /* Canh giữa phần tử chứa biểu đồ */
-    height: 800px;
+    // padding-top: 0px;
+    // width: 100%; /* Thiết lập kích thước tối đa */
+    // max-width: 1800px; /* Thiết lập kích thước tối đa cho phần tử chứa biểu đồ */
+    // margin: lef; /* Canh giữa phần tử chứa biểu đồ */
+    left: 0px;
+    height: 900px;
+    width: 1500px;
   }
   
   /* Thiết lập overflow cho phần tử chứa biểu đồ */
