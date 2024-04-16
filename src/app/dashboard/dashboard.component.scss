@@ -1,44 +1,68 @@
 .example-spacer {
-    flex: 1 1 auto;
-  }
-  
-.main-body {
-  padding-top: 20px;
-  margin: 0 auto;
-  max-width: 1348px;
-  mat-form-field {
-    width: 100%;
-  }
+  flex: 1 1 auto;
 }
-  
-  // .action {
-  //   display: flex;
-  //   gap: 5px;
-  // }
-  /* Thêm các lớp cho các trạng thái */
+
+.main-body {
+  padding-top: 0px;
+  margin: 0 auto;
+}
+
+.table-container {
+  width: 1440px;
+  height: 700px;
+  overflow: auto;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
 .normal-row {
   color: green;
 }
 
 .error-row {
-  color: red; /* Màu đỏ cho trạng thái error */
+  color: red;
   font-weight: bold;
 }
 
 .calib-row {
-  color: purple; /* Màu tím cho trạng thái calib */
+  color: purple;
   font-weight: bold;
   font-style: italic;
 }
 
-.high-alarm{
+.high-alarm {
   color: red;
   font-weight: bold;
   animation: blink-animation 500ms infinite alternate;
 }
 
-.normal-alarm{
+.normal-alarm {
   color: green;
+  // font-size: 30px;
 }
 
 @keyframes blink-animation {
@@ -48,10 +72,4 @@
   to {
     opacity: 0;
   }
-  
-}
-
-.mat-header-cell, .mat-cell {
-  padding-left: 1500px; /* Khoảng cách bên trái */
-  padding-right: 1500px; /* Khoảng cách bên phải */
 }

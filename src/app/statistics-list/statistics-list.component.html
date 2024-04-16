@@ -1,33 +1,11 @@
-<!-- <div class="row">
-    <div class="col-lg6">
-        <h1>{{'Trend' | translate}}</h1>
-        
-          <div>
-            <canvas #realtimeChart id="lineChart" width="400" height="300"></canvas>
-          </div>
-    </div>
-</div> -->
-
-<!-- <div class="language">
-    <span class="fi fi-vn">
-      <button mat-button (click)="useLanguage('vi')"></button>
-    </span>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-    <span class="fi fi-us">
-      <button mat-button (click)="useLanguage('en')"></button>
-    </span>
-  </div> -->
-  
 <div class="row">
   <div>
     <h1>
-      {{ 'Biểu đồ:' | translate }}
-      <select [(ngModel)]="selectedValue" (change)="onSelectChange($event)"class="custom-dropdown">
+      {{ 'Biểu đồ:' }}
+      <select [(ngModel)]="selectedValue" (change)="onSelectChange()" class="custom-dropdown">
         <option *ngFor="let value of values" [value]="value">{{ value }}</option>
       </select>
     </h1>
-
   </div>
-  <canvas id="lineChart"> </canvas>
-
+  <canvas #lineChart></canvas>
 </div>

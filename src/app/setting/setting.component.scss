@@ -1,15 +1,42 @@
 .example-spacer {
-    flex: 1 1 auto;
-  }
-  
+  flex: 1 1 auto;
+}
+
 .main-body {
-  padding-top: 20px;
+  padding-top: 0px;
   margin: 0 auto;
-  max-width: 1348px;
-  // text-align: center;
-  mat-form-field {
-    width: 100%;
-  }
+}
+
+.table-container {
+  width: 1440px;
+  height: 750px;
+  overflow: auto;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
 }
 
 .action {

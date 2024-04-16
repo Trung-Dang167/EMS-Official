@@ -1,25 +1,27 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Data } from './settingInfo';
+import { ServerService } from '../shared/server.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ServerService } from '../shared/server.service';
-import { RangeModificationComponent } from './range-modification/range-modification.component';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { RangeModificationComponent } from './range-modification/range-modification.component';
 
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit {
+
+export class SettingComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  public displayColumns: string[] = ['tag', 'name', 'maxValue', 'alarmValue', 'action']
-  dataSource!: MatTableDataSource<any>
+  public displayColumns: string[] = ['tag', 'name', 'maxValue', 'alarmValue', 'action'];
+  dataSource!: MatTableDataSource<Data>;
 
   constructor(
-    private data: ServerService, 
+    private data$: ServerService, 
     private _dialog: MatDialog,
     private translate: TranslateService) {
       translate.setDefaultLang('vi');
@@ -27,17 +29,32 @@ export class SettingComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this. getCustomizeTab()
+    this. getSettingInfo()
   }
 
-  getCustomizeTab() {
-    this.data.getData().subscribe({
+  ngAfterViewInit(): void {
+    if (this.sort && this.dataSource) {
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  getSettingInfo() {
+    this.data$.getData().subscribe({
       next: (res) => {
-        this.dataSource = new MatTableDataSource(res)
-        this.dataSource.sort = this.sort
+        // Sắp xếp mảng res dựa trên thuộc tính order
+        res.sort((a, b) => a.order - b.order);
+        
+        this.dataSource = new MatTableDataSource(res);
+  
+        if (this.sort) {
+          this.dataSource.sort = this.sort;
+        }
       },
-      error: console.log
-    })
+      error: (error) => {
+        console.error('Error fetching dashboard data:', error);
+        // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi cho người dùng)
+      }
+    });
   }
 
   openEditForm(data: any) {
@@ -49,7 +66,7 @@ export class SettingComponent implements OnInit {
     dialogRef.afterClosed().subscribe({
       next: (val: any) => {
         if (val) {
-          this.getCustomizeTab();
+          this.getSettingInfo();
         }
       },
     });
