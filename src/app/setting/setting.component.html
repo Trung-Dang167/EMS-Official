@@ -10,6 +10,7 @@
           <th>{{ 'Tên Mẫu Đo' | translate }}</th>
           <th>{{ 'Giá Trị Đo Tối Đa' | translate }}</th>
           <th>{{ 'Đặt Ngưỡng Cảnh Báo' | translate }}</th>
+          <th>{{ 'Đơn vị đo' | translate }}</th>
           <th>{{ 'Cập nhật' | translate }}</th>
         </tr>
       </thead>
@@ -19,6 +20,7 @@
           <td>{{ data.name }}</td>
           <td>{{ data.maxValue }}</td>
           <td>{{ data.alarmValue }}</td>
+          <td>{{ data.unit }}</td>
           <td>
             <button mat-icon-button color="primary" (click)="openEditForm(data)">
               <mat-icon>edit</mat-icon>

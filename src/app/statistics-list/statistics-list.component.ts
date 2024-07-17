@@ -1,9 +1,13 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { Chart } from 'chart.js/auto';
 import { ServerService } from '../shared/server.service';
 import { TranslateService } from '@ngx-translate/core';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import 'chartjs-adapter-date-fns';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-statistics-list',
@@ -14,8 +18,8 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
   chart: any;
   dataSource!: any[];
-  selectedValue: string = 'Flow';
-  values: string[] = ['Flow', 'Pressure', 'O2', 'CO', 'NOx', 'SO2', 'HCl', 'Dust', 'H20', 'Temperature'];
+  selectedValue: string = 'H20';
+  values: string[] = ['H20', 'HCl', 'SO2', 'NOx', 'CO', 'O2', 'Pressure', 'Temperature', 'Flow', 'Dust'];
   @ViewChild('lineChart', { static: true }) chartCanvas!: ElementRef;
 
   constructor(private srv: ServerService, private translate: TranslateService) {
@@ -26,7 +30,7 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.getChartData();
-    interval(30000)
+    interval(60000)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
         this.getChartData();
@@ -44,7 +48,7 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
     this.srv.getStat().subscribe({
       next: (res) => {
         this.dataSource = res;
-        console.log('DataSource in getChartData:');
+        console.log('DataSource in getChartData', this.dataSource);
         if (!this.chart){
           this.initializeChart(this.selectedValue); //Tạo biểu đồ ban đầu
         } else {
@@ -63,6 +67,7 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
     this.initializeChart(this.selectedValue);
   }
 
+
   initializeChart(selectedValue: string): void {
     console.log('initializeChart called');
     if (this.chart){
@@ -71,12 +76,29 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
 
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
     const filteredData = this.dataSource ? this.dataSource.filter(item => item.name === selectedValue) : [];
-    const labels = filteredData.map(item => item.time);
-    const data = filteredData.map(item => parseFloat(item.value));
-    const alarm = filteredData.map(item => parseFloat(item.alarmValue));
-    const unit = filteredData.map(item => item.unit);
-    const maxRange = filteredData.map(item => parseFloat(item.maxValue));
-    const minRange = filteredData.map(item => parseFloat(item.minValue));
+    
+    const chartData = filteredData.map(item => ({
+      time: item.time,
+      value: parseFloat(item.value),
+      alarmValue: parseFloat(item.alarmValue),
+      unit: item.unit,
+      maxValue: parseFloat(item.maxValue),
+      minValue: parseFloat(item.minValue)
+    }));
+  
+    const labels = chartData.map(item => item.time);
+    const data = chartData.map(item => item.value);
+    const alarm = chartData.map(item => item.alarmValue);
+    const unit = chartData.length > 0 ? chartData[0].unit : '';
+    const maxRange = chartData.length > 0 ? chartData[0].maxValue : undefined;
+    // const minRange = chartData.length > 0 ? chartData[0].minValue : undefined;
+    const minRange = 0;
+    console.log('Labels:', labels);
+    console.log('Data:', data);
+    console.log('Alarm:', alarm);
+    console.log('Unit:', unit);
+    console.log('Max:', maxRange);
+    console.log('Min:', minRange);
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -87,28 +109,43 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
           data: data,
           fill: false,
           borderColor: 'blue',
-          borderWidth: 1.5
+          pointBackgroundColor: 'blue',
+          borderWidth: 1.2,
+          pointRadius: 1.0,
+          cubicInterpolationMode: 'monotone'
         },
         {
           label: 'Alarm Setting',
           data: alarm,
           fill: false,
           borderColor: 'red',
-          borderWidth: 1.5
+          pointBackgroundColor: 'red',
+          borderWidth: 1.2,
+          pointRadius: 1.0,
+          cubicInterpolationMode: 'monotone'
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        aspectRatio: 0.5,
         scales: {
+          x: {
+            type: 'time',
+            time: {
+              tooltipFormat: 'dd'
+            },
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
           y: {
             title: {
               display: true,
-              text: unit[0]
+              text: unit
             },
-            max: maxRange[0],
-            min: minRange[0]
+            max: maxRange,
+            min: minRange
           }
         }
       }
