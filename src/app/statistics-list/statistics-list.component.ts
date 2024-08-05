@@ -48,7 +48,7 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
     this.srv.getStat().subscribe({
       next: (res) => {
         this.dataSource = res;
-        console.log('DataSource in getChartData', this.dataSource);
+        // console.log('DataSource in getChartData', this.dataSource);
         if (!this.chart){
           this.initializeChart(this.selectedValue); //Tạo biểu đồ ban đầu
         } else {
@@ -91,14 +91,7 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
     const alarm = chartData.map(item => item.alarmValue);
     const unit = chartData.length > 0 ? chartData[0].unit : '';
     const maxRange = chartData.length > 0 ? chartData[0].maxValue : undefined;
-    // const minRange = chartData.length > 0 ? chartData[0].minValue : undefined;
     const minRange = 0;
-    console.log('Labels:', labels);
-    console.log('Data:', data);
-    console.log('Alarm:', alarm);
-    console.log('Unit:', unit);
-    console.log('Max:', maxRange);
-    console.log('Min:', minRange);
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -109,25 +102,20 @@ export class StatisticsListComponent implements OnInit, OnDestroy {
           data: data,
           fill: false,
           borderColor: 'blue',
-          pointBackgroundColor: 'blue',
           borderWidth: 1.2,
-          pointRadius: 1.0,
-          cubicInterpolationMode: 'monotone'
         },
         {
           label: 'Alarm Setting',
           data: alarm,
           fill: false,
           borderColor: 'red',
-          pointBackgroundColor: 'red',
           borderWidth: 1.2,
-          pointRadius: 1.0,
-          cubicInterpolationMode: 'monotone'
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        aspectRatio: 0.5,
         scales: {
           x: {
             type: 'time',
